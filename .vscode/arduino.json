@@ -1,0 +1,8 @@
+{
+    "sketch": "main.ino",
+    "port": "COM3",
+    "board": "arduino:sam:arduino_due_x_dbg",
+    "output": "build",
+    "debugger": "jlink",
+    "intelliSenseGen": "global"
+}
