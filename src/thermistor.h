@@ -6,22 +6,37 @@
  *  - NTC (Negative Temperature Coefficient) thermistors, which decrease their resistance as the temperature raises
  *  - PTC (Positive Temperature Coefficient) thermistors, which increase their resistance as the temperature raises
  * 
- * Most electronic thermometers, are the former type.
+ * Most electronic thermometers are of the former type.
  */
 class Thermistor {
   private:
     const static int DEFAULT_N_SAMPLES = 10;
     const static int DEFAULT_SAMPLING_INTERVAL_MS = 50;
+    const static int DEFAULT_THERMISTOR_BASE_RESISTANCE = 22000;
 
     int pin;
+    int adc_max_value;
     int n_samples;
     int sampling_interval_ms;
+
+    /**
+     * Compute the resistance of the thermistor from an analog sample
+     * 
+     * @param adc_reading The analog sample
+     * @param adc_max_value The resolution of the onboard's ADC unit. For example, for an Arduino Due this value is
+     *                      1024 since the resolution of its ADC is 8 bits (therefore, 2 ^ 8 = 1024)
+     * @param thermistor_base_resistance The base resistance value (in ohms) of the thermistor. This should also be
+     *                                   the value of the resistor that is put in series with the thermistor 
+     */
+    double __compute_resistance(int adc_reading,
+                                int thermistor_base_resistance = Thermistor::DEFAULT_THERMISTOR_BASE_RESISTANCE);
 
   public:
     /**
      * Constructor.
      */
     Thermistor(int _pin,
+               int _adc_max_value,
                int _n_samples = Thermistor::DEFAULT_N_SAMPLES,
                int _sampling_interval_ms = Thermistor::DEFAULT_SAMPLING_INTERVAL_MS);
 
@@ -42,10 +57,10 @@ class Thermistor {
      *            to find the resistance of a 220K ohm thermistor, a 100K ohm known resistor should yield decent results while
      *            a 1K ohm resistor will yield results with a margin of error greater than 100%. Choosing the known resistor
      *            is therefore crucial for accurate readings
-     * @param max_adv_value The maximum value supported by the ADC unit. For example, for an Arduino Due this value is
+     * @param adc_max_value The maximum value supported by the ADC unit. For example, for an Arduino Due this value is
      *                      1024 since the resolution of its ADC is 8 bits (therefore, 2 ^ 8 = 1024)
      */
-    [[noreturn]] void print_resistance(float v_in, float r_1, int max_adc_value);
+    [[noreturn]] void print_resistance(float v_in, float r_1, int adc_max_value);
 };
 
 #endif
