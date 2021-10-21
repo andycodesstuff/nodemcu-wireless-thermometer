@@ -7,6 +7,10 @@
  *  - PTC (Positive Temperature Coefficient) thermistors, which increase their resistance as the temperature raises
  * 
  * Most electronic thermometers are of the former type.
+ *
+ * Useful resources that were used to build this library:
+ *  - https://github.com/skyeperry1/Maverick-ET-73-Meat-Probe-Arduino-Library
+ *  - https://computers.tutsplus.com/tutorials/how-to-read-temperatures-with-arduino--mac-53714
  */
 class Thermistor {
   private:
