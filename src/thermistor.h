@@ -11,7 +11,7 @@
 class Thermistor {
   private:
     const static int DEFAULT_N_SAMPLES = 10;
-    const static int DEFAULT_SAMPLING_INTERVAL_MS = 50;
+    const static int DEFAULT_SAMPLING_INTERVAL_MS = 10;
     const static int DEFAULT_THERMISTOR_BASE_RESISTANCE = 22000;
 
     // Steinhart–Hart equation coefficients
