@@ -1,6 +1,7 @@
 #include "thermistor.h"
 
 #include "Arduino.h"
+#include <math.h>
 
 Thermistor::Thermistor(int _pin, int _adc_max_value, int _n_samples, int _sampling_interval_ms) {
   Thermistor::pin = _pin;
@@ -9,14 +10,7 @@ Thermistor::Thermistor(int _pin, int _adc_max_value, int _n_samples, int _sampli
   Thermistor::sampling_interval_ms = _sampling_interval_ms;
 }
 
-double Thermistor::__compute_resistance(int adc_reading, int thermistor_base_resistance) {
-  // Some magical trickery I have no idea why it works but it works so damn well.
-  int base_resistance = thermistor_base_resistance / 10;
-
-  return ((adc_max_value * base_resistance) / (double) adc_reading) - base_resistance;
-}
-
-int Thermistor::average_adc_reading() {
+int Thermistor::__get_average_adc_sample() {
   int *raw_samples = new int[n_samples];
   int sum_samples = 0;
 
@@ -29,12 +23,28 @@ int Thermistor::average_adc_reading() {
   return sum_samples / n_samples;
 }
 
+double Thermistor::__compute_resistance(int adc_reading, int thermistor_base_resistance) {
+  // Some magical trickery I have no idea why it works but it works so damn well.
+  int base_resistance = thermistor_base_resistance / 10;
+
+  return ((adc_max_value * base_resistance) / (double) adc_reading) - base_resistance;
+}
+
+double Thermistor::get_temperature_C() {
+  int average_sample = __get_average_adc_sample();
+  double R = __compute_resistance(average_sample);
+  double R_ln = log(R);
+
+  // Compute the temperature using the Steinhart–Hart equation. Then, convert it from degrees Kelvin to Celsius
+  return (1 / (A_COEFFICIENT + (B_COEFFICIENT + (C_COEFFICIENT * R_ln * R_ln)) * R_ln)) - 273.15;
+}
+
 [[noreturn]] void Thermistor::print_resistance(float v_in, float r_1, int adc_max_value) {
   float buffer, v_out, r_2;
   int raw_adc;
 
   while (true) {
-    raw_adc = average_adc_reading();
+    raw_adc = __get_average_adc_sample();
 
     if (raw_adc) {
       // Compute the resistance of the thermistor

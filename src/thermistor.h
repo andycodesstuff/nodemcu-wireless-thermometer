@@ -14,10 +14,20 @@ class Thermistor {
     const static int DEFAULT_SAMPLING_INTERVAL_MS = 50;
     const static int DEFAULT_THERMISTOR_BASE_RESISTANCE = 22000;
 
+    // Steinhart–Hart equation coefficients
+    const long double A_COEFFICIENT = 1.129148E-3;
+    const long double B_COEFFICIENT = 2.34125E-4;
+    const long double C_COEFFICIENT = 8.76741E-8;
+
     int pin;
     int adc_max_value;
     int n_samples;
     int sampling_interval_ms;
+
+    /**
+     * Samples multiple analog values from a pin and returns an average of the results.
+     */
+    int __get_average_adc_sample();
 
     /**
      * Compute the resistance of the thermistor from an analog sample
@@ -41,9 +51,9 @@ class Thermistor {
                int _sampling_interval_ms = Thermistor::DEFAULT_SAMPLING_INTERVAL_MS);
 
     /**
-     * Samples multiple analog values from a pin and returns an average of the results.
+     * Returns the temperature in degrees Celsius.
      */
-    int average_adc_reading();
+    double get_temperature_C();
 
     /**
      * Prints the resistance value of the thermistor. Follow this guide to build the test circuit:
