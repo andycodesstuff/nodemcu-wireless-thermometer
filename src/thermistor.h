@@ -37,8 +37,6 @@ class Thermistor {
      * Compute the resistance of the thermistor from an analog sample
      * 
      * @param adc_reading The analog sample
-     * @param adc_max_value The resolution of the onboard's ADC unit. For example, for an Arduino Due this value is
-     *                      1024 since the resolution of its ADC is 8 bits (therefore, 2 ^ 8 = 1024)
      * @param thermistor_base_resistance The base resistance value (in ohms) of the thermistor. This should also be
      *                                   the value of the resistor that is put in series with the thermistor 
      */
@@ -48,6 +46,12 @@ class Thermistor {
   public:
     /**
      * Constructor.
+     * 
+     * @param _pin The analog pin connected to the thermistor
+     * @param _adc_max_value The resolution of the onboard's ADC unit. For example, for an Arduino Due this value is
+     *                       1024 since the default resolution of its ADC is 10 bits (therefore, 2 ^ 10 = 1024)
+     * @param _n_samples The number of samples taken from the analog pin to get an average reading
+     * @param _sampling_interval_ms The time (in ms) between each analog samples used to get an average reading
      */
     Thermistor(int _pin,
                int _adc_max_value,
@@ -71,10 +75,8 @@ class Thermistor {
      *            to find the resistance of a 220K ohm thermistor, a 100K ohm known resistor should yield decent results while
      *            a 1K ohm resistor will yield results with a margin of error greater than 100%. Choosing the known resistor
      *            is therefore crucial for accurate readings
-     * @param adc_max_value The maximum value supported by the ADC unit. For example, for an Arduino Due this value is
-     *                      1024 since the resolution of its ADC is 8 bits (therefore, 2 ^ 8 = 1024)
      */
-    [[noreturn]] void print_resistance(float v_in, float r_1, int adc_max_value);
+    [[noreturn]] void print_resistance(float v_in, float r_1);
 };
 
 #endif

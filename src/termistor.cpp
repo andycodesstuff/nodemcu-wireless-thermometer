@@ -39,7 +39,7 @@ double Thermistor::get_temperature_C() {
   return (1 / (A_COEFFICIENT + (B_COEFFICIENT + (C_COEFFICIENT * R_ln * R_ln)) * R_ln)) - 273.15;
 }
 
-[[noreturn]] void Thermistor::print_resistance(float v_in, float r_1, int adc_max_value) {
+[[noreturn]] void Thermistor::print_resistance(float v_in, float r_1) {
   float buffer, v_out, r_2;
   int raw_adc;
 
