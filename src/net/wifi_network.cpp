@@ -7,6 +7,7 @@ WiFiNetwork::WiFiNetwork(const char *_ssid, const char *_pass, int _retry_timeou
   WiFiNetwork::ssid = _ssid;
   WiFiNetwork::pass = _pass;
   WiFiNetwork::retry_timeout_ms = _retry_timeout_ms;
+  WiFiNetwork::is_connected = false;
 }
 
 ConnectionStatus WiFiNetwork::connect(int timeout_ms) {
@@ -16,6 +17,8 @@ ConnectionStatus WiFiNetwork::connect(int timeout_ms) {
 
   // Attempt to connect to the network
   WiFi.begin(WiFiNetwork::ssid, WiFiNetwork::pass);
+  WiFiNetwork::is_connected = false;
+
   Serial.print("connecting to \"");
   Serial.print(ssid);
   Serial.println("\"...");
@@ -52,6 +55,8 @@ ConnectionStatus WiFiNetwork::connect(int timeout_ms) {
       Serial.println("\"");
       return ConnectionStatus::WRONG_PASS;
     case WL_CONNECTED:
+      WiFiNetwork::is_connected = true;
+
       Serial.print("connection established (IPv4 address: ");
       Serial.print(WiFi.localIP());
       Serial.println(")");
@@ -59,4 +64,32 @@ ConnectionStatus WiFiNetwork::connect(int timeout_ms) {
     default:
       return ConnectionStatus::TIMEOUT;
   }
+}
+
+void WiFiNetwork::send(const char *msg) {
+  if (!WiFiNetwork::is_connected) {
+    return;
+  }
+
+  // Broadcast UDP packet
+  IPAddress broadcast_address = WiFiNetwork::__compute_broadcast_address();
+  WiFiNetwork::udp.beginPacket(broadcast_address, WiFiNetwork::REMOTE_UDP_PORT);
+  WiFiNetwork::udp.write(msg);
+  WiFiNetwork::udp.endPacket();
+}
+
+IPAddress WiFiNetwork::__compute_broadcast_address() {
+  if (!WiFiNetwork::is_connected) {
+    return IPAddress(255, 255, 255, 255);
+  }
+
+  IPAddress subnet_mask = WiFi.subnetMask();
+  IPAddress gateway_address = WiFi.gatewayIP();
+  IPAddress broadcast_address(0, 0, 0, 0);
+
+  // Compute broadcast IPv4 address
+  for (int i = 0; i < 4; i++) {
+    broadcast_address[i] = ~subnet_mask[i] | gateway_address[i];
+  }
+  return broadcast_address;
 }
