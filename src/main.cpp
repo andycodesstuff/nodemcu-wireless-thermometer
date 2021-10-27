@@ -1,4 +1,4 @@
-#include "thermistor.h"
+#include "sensors/thermistor.h"
 
 #include <Arduino.h>
 
