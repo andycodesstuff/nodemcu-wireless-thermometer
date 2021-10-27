@@ -1,6 +1,9 @@
 # nodemcu-wireless-thermometer
 Wireless cooking thermometer using NodeMCU (ESP12E) and ThermoPro TP17's temperature probes (22kΩ thermistors)
 
+## Wiring
+![Wiring](./assets/wiring.png)
+
 ## How it works
 Once connected to your network, it will start broadcasting UDP packets on port `13337`. These packets are in JSON format and contain the following fields:
 | Field | Type      | Description                                                           |
