@@ -17,6 +17,7 @@ void setup() {
 
 void loop() {
   double temp_C = thermistor.get_temperature_C();
+  network.send(String(temp_C).c_str());
 
   Serial.print("T: ");
   Serial.println(temp_C);
