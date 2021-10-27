@@ -1,6 +1,6 @@
 #include "thermistor.h"
 
-#include "Arduino.h"
+#include <Arduino.h>
 #include <math.h>
 
 Thermistor::Thermistor(int _pin, int _adc_max_value, int _n_samples, int _sampling_interval_ms) {

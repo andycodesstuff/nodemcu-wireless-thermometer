@@ -1,4 +1,7 @@
-#include "src/thermistor.h"
+#include "thermistor.h"
+
+#include <Arduino.h>
+
 Thermistor thermistor(A0, 1024);
 
 void setup() {
