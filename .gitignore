@@ -168,3 +168,6 @@ $RECYCLE.BIN/
 .vscode/c_cpp_properties.json
 .vscode/launch.json
 .vscode/ipch
+
+# Sensitive "environment variables" used in the C++ project
+src/env.h
