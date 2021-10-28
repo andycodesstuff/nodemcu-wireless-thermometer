@@ -31,11 +31,16 @@ void loop() {
   double temp_C = thermistor.get_temperature_C();
   unsigned long epoch = ntpClient.getEpochTime();
 
+  // Get free heap space
+  uint32_t free_heap = EspClass::getFreeHeap();
+
   // Construct JSON message
   String msg = String("{ \"ts\": ") +
                String(epoch) +
                String(", \"t\": ") +
                String(temp_C) +
+               String(", \"free_heap\": ") +
+               String(free_heap) +
                String(" }");
   network.send(msg.c_str());
   Serial.println(msg);

@@ -6,14 +6,15 @@ Wireless cooking thermometer using NodeMCU (ESP12E) and ThermoPro TP17's tempera
 
 ## How it works
 Once connected to your network, it will start broadcasting UDP packets on port `13337`. These packets are in JSON format and contain the following fields:
-| Field | Type      | Description                                                           |
-|-------|-----------|-----------------------------------------------------------------------|
-| `ts`  | `integer` | UNIX time (in seconds) at which the temperature reading was performed |
-| `t`   | `float`   | Temperature reading in degrees Celsius                                |
+| Field       | Type      | Description                                                           |
+|-------------|-----------|-----------------------------------------------------------------------|
+| `ts`        | `integer` | UNIX time (in seconds) at which the temperature reading was performed |
+| `t`         | `float`   | Temperature reading in degrees Celsius                                |
+| `free_heap` | `integer` | Free heap space (in bytes). It helps me avoid stupid memory leaks :)  |
 
 Here is an example:
 ```json
-{ "ts": 1635378303, "t": 23.99 }
+{ "ts": 1635378303, "t": 23.99, "free_heap": 49928 }
 ```
 
 ## Usage and customization
