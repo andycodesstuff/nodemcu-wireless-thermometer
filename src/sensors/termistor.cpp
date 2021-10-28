@@ -11,12 +11,10 @@ Thermistor::Thermistor(int _pin, int _adc_max_value, int _n_samples, int _sampli
 }
 
 int Thermistor::__get_average_adc_sample() {
-  int *raw_samples = new int[n_samples];
   int sum_samples = 0;
 
   for (int i = 0; i < n_samples; i++) {
-    raw_samples[i] = analogRead(pin);
-    sum_samples += raw_samples[i];
+    sum_samples += analogRead(pin);
     delay(sampling_interval_ms);
   }
 
